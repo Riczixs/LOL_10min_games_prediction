@@ -1,0 +1,93 @@
+// Decision Tree
+digraph {
+	1 [label="feat: blueGoldDiff
+gini: 0.685
+threshold: 1739.5
+class: None
+samples: 90
+"]
+	2 [label="feat: blueTotalGold
+gini: 0.674
+threshold: 17219.5
+class: None
+samples: 68
+"]
+	3 [label="feat: redTotalJungleMinionsKilled
+gini: 0.724
+threshold: 36.5
+class: None
+samples: 60
+"]
+	4 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 1
+samples: 2
+"]
+	5 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 0
+samples: 58
+"]
+	6 [label="feat: redTotalJungleMinionsKilled
+gini: 0.833
+threshold: 47.0
+class: None
+samples: 8
+"]
+	7 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 0
+samples: 3
+"]
+	8 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 1
+samples: 5
+"]
+	9 [label="feat: blueWardsPlaced
+gini: 0.939
+threshold: 14.0
+class: None
+samples: 22
+"]
+	10 [label="feat: blueWardsPlaced
+gini: 1.0
+threshold: 12.5
+class: None
+samples: 3
+"]
+	11 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 1
+samples: 2
+"]
+	12 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 0
+samples: 1
+"]
+	13 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 1
+samples: 19
+"]
+	1 -> 2
+	1 -> 9
+	9 -> 10
+	9 -> 13
+	10 -> 11
+	10 -> 12
+	2 -> 3
+	2 -> 6
+	6 -> 7
+	6 -> 8
+	3 -> 4
+	3 -> 5
+}

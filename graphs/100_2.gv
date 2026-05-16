@@ -1,0 +1,23 @@
+// Decision Tree
+digraph {
+	15 [label="feat: blueTotalExperience
+gini: 0.616
+threshold: 18762.0
+class: None
+samples: 90
+"]
+	16 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 0
+samples: 64
+"]
+	17 [label="feat: None
+gini: 0.0
+threshold: 0
+class: 1
+samples: 26
+"]
+	15 -> 16
+	15 -> 17
+}

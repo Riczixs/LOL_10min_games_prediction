@@ -2,9 +2,11 @@ import numpy as np
 import pandas as pd
 import time
 from Tree import Node
+import Graph
 
 BLUE_WINS_INDEX = 0
 SAMPLES = 9782
+id_gen = 0
 def gini_left(left_pos, left_neg):
     if left_pos == 0.0 or left_neg == 0.0:
         return 0
@@ -93,14 +95,17 @@ def check_label(node_data: pd.DataFrame, isLeaf : bool):
         return 2
     
 def train(data : pd.DataFrame, depth : int, depth_threshold : int):  
+    global id_gen
     if depth >= depth_threshold: #STOP
         res = check_label(data['blueWins'], True)
-        return Node(feature_idx=0, threshold=0, left=None, right=None, label = res, is_Leaf=True)
+        id_gen+=1
+        return Node(id=id_gen, samples = len(data), feature_idx=0, threshold=0, left=None, right=None, label = res, is_Leaf=True)
     res = check_label(data['blueWins'], False)
     if res != 2:
-        return Node(feature_idx=0, threshold=0, left=None, right=None, label = res, is_Leaf=True)
+        id_gen += 1
+        return Node(id=id_gen, samples = len(data), feature_idx=0, threshold=0, left=None, right=None, label = res, is_Leaf=True)
     else:
-        b_feat = None
+        b_feat, b_name = None, None
         b_g, b_mean = 0, 0
         for index, feat in enumerate(data.columns):
             if feat in ['gameId', 'blueWins', 'index']:
@@ -111,8 +116,10 @@ def train(data : pd.DataFrame, depth : int, depth_threshold : int):
                 b_g = g
                 b_feat = index
                 b_mean = mean
+                b_name = feat
         left, right = partition(data, b_feat, b_mean)
-        return Node(feature_idx=b_feat, threshold=b_mean, left = train(left, depth=depth+1, depth_threshold=depth_threshold), right=train(right, depth=depth+1, depth_threshold=depth_threshold), is_Leaf=False)
+        id_gen += 1
+        return Node(id=id_gen, gini = round(b_g, 3), samples = len(data),feat_name=b_name, feature_idx=b_feat, threshold=b_mean, left = train(left, depth=depth+1, depth_threshold=depth_threshold), right=train(right, depth=depth+1, depth_threshold=depth_threshold),is_Leaf=False)
 
 #Przejdź po drzewie i w liściu sprawdź odp
 def classify(node : Node, sample) -> int:
@@ -125,14 +132,25 @@ def classify(node : Node, sample) -> int:
             return classify(node.right, sample)
 
 def test(tree_root : Node, data : pd.DataFrame):
-    accurate = 0
+    tn, tp = 0, 0
+    fn, fp = 0, 0
     for s in data.itertuples(index=False):
         s_class = classify(tree_root, s)
-        if s_class == s[BLUE_WINS_INDEX]:
-            accurate += 1
-    print(f"Accurate -> {accurate} from {len(data)}")
-    print(f"Acc = {accurate/len(data)}")
-    return accurate/len(data)
+        if s_class==0 and s[BLUE_WINS_INDEX] == 0: 
+            tn += 1
+        elif s_class == 1 and s[BLUE_WINS_INDEX] == 1:
+            tp += 1
+        elif s_class == 0 and s[BLUE_WINS_INDEX] == 1:
+            fp += 1
+        else:
+            fn += 1
+    if tn!= 0 and fp != 0:
+        print(f"Swoistosc -> {tn/(tn+fp)}")
+    if tp!=0 and fn != 0:
+        print(f"Czulosc -> {tp/(tp+fn)}")
+    print(f"Accurate -> {tp + tn} from {len(data)}")
+    print(f"Acc = {(tp + tn)/len(data)}\n\n")
+    return (tp + tn)/len(data)
 
 
 def print_node(node : Node, depth : int):
@@ -150,16 +168,17 @@ def read_data(data: pd.DataFrame, s : int):
 
 data = pd.read_csv('high_diamond_ranked_10min.csv', usecols=['blueWins','blueWardsPlaced','blueWardsDestroyed','blueFirstBlood','blueKills','blueDeaths','blueAssists','blueEliteMonsters','blueDragons','blueHeralds','blueTowersDestroyed','blueTotalGold','blueTotalExperience','blueTotalMinionsKilled','blueTotalJungleMinionsKilled','blueGoldDiff','blueExperienceDiff','redWardsPlaced','redWardsDestroyed','redAssists','redEliteMonsters','redDragons','redHeralds','redTowersDestroyed','redTotalGold','redTotalExperience','redTotalMinionsKilled','redTotalJungleMinionsKilled']),
 rand_data= data[0].sample(frac=1)
-
-size = [2000]
+test_data, training_data  = read_data(rand_data, 100)
+node = train(training_data, 1, 4)
+size = [100]
 dept = [1,2,3,4,5]
 for s in size:
     test_data, training_data  = read_data(rand_data, s)
-    #print(test_data, training_data)
     for d in dept:
+        print(f"Sample -> {s} Depth -> {d}")
         start = time.perf_counter()
         tree_root = train(training_data, 1, d)
         stop = time.perf_counter()
-        print(f"Training time -> {stop-start} for depth -> {d}")
+        Graph.make_graph(tree_root, s, d)
+        print(f"Training time -> {stop-start}")
         result = test(tree_root, test_data)
-
