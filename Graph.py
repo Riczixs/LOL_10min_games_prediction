@@ -15,9 +15,9 @@ def add_edges(node: Node):
         add_edges(node.right)
         add_edges(node.left)
         
-def make_graph(node : Node, size: int, depth: int):
+def make_graph(node : Node, size: int, depth: int, index: int):
     global dot
     add_nodes(node)
     add_edges(node)
-    dot.render(directory='graphs', filename=f'{size}_{depth}.gv')
+    dot.render(directory='graphs', filename=f'{size}_{depth}_{index}.gv')
     dot = gz.Digraph(comment = 'Decision Tree')

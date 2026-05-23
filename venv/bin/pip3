@@ -1,4 +1,4 @@
-#!/home/rysie/LOL_10min_games_prediction/venv/bin/python3
+#!/home/rys/Study/ED/LOL_10min_games_prediction/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

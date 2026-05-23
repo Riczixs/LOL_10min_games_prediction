@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 import time
 from Tree import Node
@@ -7,6 +6,7 @@ import Graph
 BLUE_WINS_INDEX = 0
 SAMPLES = 9782
 id_gen = 0
+
 def gini_left(left_pos, left_neg):
     if left_pos == 0.0 or left_neg == 0.0:
         return 0
@@ -20,7 +20,7 @@ def gini_right(right_pos, right_neg):
 def gini_gain(g_left, g_right, left, right):
     if left == 0.0 or right == 0.0:
         return 0
-    return 1 - ((left/(left+right))*g_left) - ((right/(left+right))*g_right) 
+    return 1 - ((left/(left+right))*g_left) - ((right/(left+right))*g_right)
 
 def get_gain(series : pd.DataFrame, mean : float):
     left_pos, left_neg = 0, 0
@@ -131,7 +131,7 @@ def classify(node : Node, sample) -> int:
         else:
             return classify(node.right, sample)
 
-def test(tree_root : Node, data : pd.DataFrame):
+def test(tree_root : Node, data : pd.DataFrame, d : int):
     tn, tp = 0, 0
     fn, fp = 0, 0
     for s in data.itertuples(index=False):
@@ -144,12 +144,18 @@ def test(tree_root : Node, data : pd.DataFrame):
             fp += 1
         else:
             fn += 1
-    if tn!= 0 and fp != 0:
-        print(f"Swoistosc -> {tn/(tn+fp)}")
-    if tp!=0 and fn != 0:
-        print(f"Czulosc -> {tp/(tp+fn)}")
-    print(f"Accurate -> {tp + tn} from {len(data)}")
-    print(f"Acc = {(tp + tn)/len(data)}\n\n")
+    with open('results70_30.txt', 'a') as f:
+        f.write(f"MAX_DEPTH -> {d}\n")
+        if tn!= 0 and fp != 0:
+            print(f"Specifity -> {tn/(tn+fp)}")
+            f.write(f"Specifity -> {tn/(tn+fp)}\n")
+        if tp!=0 and fn != 0:
+            print(f"Sensitivity -> {tp/(tp+fn)}")
+            f.write(f"Sensitivity -> {tp/(tp+fn)}\n")
+        print(f"Accurate -> {tp + tn} from {len(data)}")
+        f.write(f"Accurate -> {tp + tn} from {len(data)}\n")
+        print(f"Accuracy = {(tp + tn)/len(data)}\n\n")
+        f.write(f"Accuracy = {(tp + tn)/len(data)}\n\n")
     return (tp + tn)/len(data)
 
 
@@ -162,23 +168,25 @@ def print_node(node : Node, depth : int):
         print_node(node.right, depth+1)
 
 def read_data(data: pd.DataFrame, s : int):
-    t1 = int(s*0.1)
+    t1 = int(s*0.3)
     return data[0:t1], data[t1:s]
 
 
-data = pd.read_csv('high_diamond_ranked_10min.csv', usecols=['blueWins','blueWardsPlaced','blueWardsDestroyed','blueFirstBlood','blueKills','blueDeaths','blueAssists','blueEliteMonsters','blueDragons','blueHeralds','blueTowersDestroyed','blueTotalGold','blueTotalExperience','blueTotalMinionsKilled','blueTotalJungleMinionsKilled','blueGoldDiff','blueExperienceDiff','redWardsPlaced','redWardsDestroyed','redAssists','redEliteMonsters','redDragons','redHeralds','redTowersDestroyed','redTotalGold','redTotalExperience','redTotalMinionsKilled','redTotalJungleMinionsKilled']),
-rand_data= data[0].sample(frac=1)
-test_data, training_data  = read_data(rand_data, 100)
-node = train(training_data, 1, 4)
-size = [100]
-dept = [1,2,3,4,5]
-for s in size:
-    test_data, training_data  = read_data(rand_data, s)
-    for d in dept:
-        print(f"Sample -> {s} Depth -> {d}")
-        start = time.perf_counter()
-        tree_root = train(training_data, 1, d)
-        stop = time.perf_counter()
-        Graph.make_graph(tree_root, s, d)
-        print(f"Training time -> {stop-start}")
-        result = test(tree_root, test_data)
+data = pd.read_csv('high_diamond_ranked_10min.csv', usecols=['blueWins','blueWardsPlaced','blueWardsDestroyed','blueFirstBlood','blueKills','blueDeaths','blueAssists','blueEliteMonsters','blueDragons','blueHeralds','blueTowersDestroyed','blueTotalMinionsKilled','blueTotalJungleMinionsKilled','blueGoldDiff','blueExperienceDiff','redWardsPlaced','redWardsDestroyed','redAssists','redEliteMonsters','redDragons','redHeralds','redTowersDestroyed','redTotalMinionsKilled','redTotalJungleMinionsKilled'])
+size = [SAMPLES]
+dept = [1,2,3,4]
+index = 10
+for i in range(0,10):
+    rand_data= data[0].sample(frac=1)
+    for s in size:
+        test_data, training_data  = read_data(rand_data, s)
+        for d in dept:
+            print(f"Sample -> {s} Depth -> {d}")
+            start = time.perf_counter()
+            tree_root = train(training_data, 1, d)
+            stop = time.perf_counter()
+            #UNCOMMENT TO BUILD DECISION TREE GRAPH
+            #Graph.make_graph(tree_root, s, d, index)
+            index+=1
+            print(f"Training time -> {stop-start}")
+            result = test(tree_root, test_data, d)
