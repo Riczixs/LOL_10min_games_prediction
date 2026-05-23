@@ -1,0 +1,88 @@
+START 0
+Sample -> 9782 Depth -> 4
+Training time -> 1134.7747709369996
+Swoistosc -> 0.7275541795665634
+Czulosc -> 0.6879432624113475
+Accurate -> 1384 from 1956
+Acc = 0.7075664621676891
+
+
+START 1
+Sample -> 9782 Depth -> 4
+Training time -> 1123.8849427590012
+Swoistosc -> 0.7028073572120038
+Czulosc -> 0.7258938244853738
+Accurate -> 1396 from 1956
+Acc = 0.7137014314928425
+
+
+START 2
+Sample -> 9782 Depth -> 4
+Training time -> 1126.6181539089994
+Swoistosc -> 0.7164480322906155
+Czulosc -> 0.7502590673575129
+Accurate -> 1434 from 1956
+Acc = 0.7331288343558282
+
+
+START 3
+Sample -> 9782 Depth -> 4
+Training time -> 1128.5941878859994
+Swoistosc -> 0.734390485629336
+Czulosc -> 0.7180570221752904
+Accurate -> 1421 from 1956
+Acc = 0.726482617586912
+
+
+START 4
+Sample -> 9782 Depth -> 4
+Training time -> 1127.585587726
+Swoistosc -> 0.694015444015444
+Czulosc -> 0.7260869565217392
+Accurate -> 1387 from 1956
+Acc = 0.7091002044989775
+
+
+START 5
+Sample -> 9782 Depth -> 4
+Training time -> 1124.9378858339987
+Swoistosc -> 0.7093023255813954
+Czulosc -> 0.7196969696969697
+Accurate -> 1397 from 1956
+Acc = 0.7142126789366053
+
+
+START 6
+Sample -> 9782 Depth -> 4
+Training time -> 1129.8298444889988
+Swoistosc -> 0.7040229885057471
+Czulosc -> 0.7346491228070176
+Accurate -> 1405 from 1956
+Acc = 0.7183026584867076
+
+
+START 7
+Sample -> 9782 Depth -> 4
+Training time -> 1123.645508046
+Swoistosc -> 0.7116104868913857
+Czulosc -> 0.7421171171171171
+Accurate -> 1419 from 1956
+Acc = 0.7254601226993865
+
+
+START 8
+Sample -> 9782 Depth -> 4
+Training time -> 1130.2543309699977
+Swoistosc -> 0.7080152671755725
+Czulosc -> 0.737885462555066
+Accurate -> 1412 from 1956
+Acc = 0.721881390593047
+
+
+START 9
+Sample -> 9782 Depth -> 4
+Training time -> 1130.0085585969973
+Swoistosc -> 0.7099165894346617
+Czulosc -> 0.7400228050171037
+Accurate -> 1415 from 1956
+Acc = 0.7234151329243353
